@@ -1,28 +1,24 @@
 package com.rose.controler;
 
-import com.rose.dbopt.mapper.TbSysUserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @RestController
 public class TestController {
+
     @Autowired
     private DiscoveryClient discoveryClient;
-    @Inject
-    private TbSysUserMapper tbSysUserMapper;
 
     /**
-     * 服务发现，证明内容中心总能找到用户中心
+     * 功能：证明可以找到服务
      * @return
      */
     @GetMapping("/test1")
