@@ -1,0 +1,34 @@
+Thymeleaf中的内联
+一.文本内联
+[[…]]之间的表达式在Thymeleaf被认为是内联表达式,在其中您可以使用任何类型的表达式,也会有效th:text属性。
+<p>Hello, [[${session.user.name}]]!</p>
+等同于：
+<p>Hello, <span th:text="${session.user.name}">Sebastian</span>!</p>
+为了让内联工作,我们必须激活它使用th:inline 属性,它有三个可能的值或模式(text, javascript 和 none)。让我们试着文本:
+<p th:inline="text">Hello, [[${session.user.name}]]!</p>
+如果不使用th:inline="text",则会被当做字符串显示。th:inline="javascript"表示能在js中使用[ [] ]取值。
+
+标签的th:inline不需要包含内联的一个表达式，任何父标签都行，例如如下也是可以的：
+
+<body th:inline="text">
+   ...
+   <p>Hello, [[${session.user.name}]]!</p>
+   ...
+</body>
+
+二.脚本内联
+　　Thymeleaf提供一系列的“脚本”的内联模式功能,这样你就可以将你的数据在脚本中创建一些脚本语言。
+　　我们可以做的第一件事,写脚本内联表达式的值到我们的脚本。
+
+<script th:inline="javascript">
+    var user = [[${user.username}]];
+      alert(user);
+</script>
+
+<script th:inline="javascript">
+      var msg  = 'Hello, ' + [[${user.username}]];
+      alert(msg);
+</script>
+
+=====================================================================
+参考地址：https://www.cnblogs.com/suncj/p/4031486.html
