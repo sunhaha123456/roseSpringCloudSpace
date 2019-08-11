@@ -1,8 +1,8 @@
 package com.ribbon.role;
 
-import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
+import com.alibaba.nacos.client.naming.core.Balancer;
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.AbstractLoadBalancerRule;
 import com.netflix.loadbalancer.BaseLoadBalancer;
@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.alibaba.nacos.NacosDiscoveryProperties;
 import org.springframework.cloud.alibaba.nacos.ribbon.NacosServer;
+
+import java.util.List;
 
 @Slf4j
 public class NacosWeightedRule extends AbstractLoadBalancerRule {
@@ -36,12 +38,27 @@ public class NacosWeightedRule extends AbstractLoadBalancerRule {
             NamingService namingService = nacosDiscoveryProperties.namingServiceInstance();
 
             // nacos client自动通过基于权重的负载均衡算法，给我们选择一个实例。
-            Instance instance = namingService.selectOneHealthyInstance(name);
+            //Instance instance = namingService.selectOneHealthyInstance(name);
 
-            log.info("选择的实例是：port = {}, instance = {}", instance.getPort(), instance);
-            return new NacosServer(instance);
-        } catch (NacosException e) {
+            // 基于权重的负载均衡算法，返回1个实例
+            List<Instance> instanceList = namingService.selectInstances(name, true);
+            if (instanceList.size() > 0) {
+                Instance instance = ExtendBalancer.getHostByRandomWeight2(instanceList);
+                log.info("选择的实例是：port = {}, instance = {}", instance.getPort(), instance);
+                return new NacosServer(instance);
+            } else {
+                log.info("未找到可用实例！");
+                return null;
+            }
+        } catch (Exception e) {
+            log.info("实例匹配错误：{}", e);
             return null;
         }
+    }
+}
+
+class ExtendBalancer extends Balancer {
+    public static Instance getHostByRandomWeight2(List<Instance> hosts) {
+        return getHostByRandomWeight(hosts);
     }
 }
