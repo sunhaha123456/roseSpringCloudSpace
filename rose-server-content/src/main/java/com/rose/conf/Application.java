@@ -3,12 +3,14 @@ package com.rose.conf;
 import com.rose.interceptor.LoginInterceptor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 import tk.mybatis.spring.annotation.MapperScan;
 
 import javax.inject.Inject;
+import java.time.Duration;
 
 @RestController
 @ComponentScan("com.rose")
@@ -55,12 +58,20 @@ public class Application extends WebMvcConfigurationSupport {
     @Primary
     @Bean
     public RestTemplate restTemplate(){
-        return new RestTemplate();
+        return getRestTemplate();
     }
 
     @Bean
     @LoadBalanced
     public RestTemplate loadBalance(){
-        return new RestTemplate();
+        return getRestTemplate();
+    }
+
+    private RestTemplate getRestTemplate() {
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setConnectTimeout(15000);
+        requestFactory.setReadTimeout(15000);
+        RestTemplate restTemplate = new RestTemplate(requestFactory);
+        return restTemplate;
     }
 }
