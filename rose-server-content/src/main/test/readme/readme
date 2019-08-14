@@ -2,7 +2,7 @@
     当某个服务kill掉，需要5秒左右的时间，nacos才会感知到，其他服务也才会感知到
     并且，默认情况下，robbion不支持nacos的上下线、权重操作
     目前项目中使用的优雅停机方案：
-        a、重写robbin路由规则，使其选取处于上线状态，且权重较大的实例
+        a、重写了robbin路由规则，使其支持nacos上下线、权重操作，也就是其会自动选取处于上线状态，且权重较大的实例
         b、kill前，到nacos管控台，手动下线操作
 （2）关于nacos领域模型：Namespace、Group、Service、Cluster、Instance
 2、ribbon 路由规则：
