@@ -83,7 +83,7 @@ public class TestController {
      */
     @GetMapping("/test3")
     public Map test3() {
-        String targetUrl = "http://rose-gateway-server:8081/rose-gateway-server/login/verify";
+        String targetUrl = "http://rose-gateway-server/rose-gateway-server/login/verify";
         Map map = new HashMap<>();
         map.put("uname", "aaa");
         map.put("upwd", "bbb");
