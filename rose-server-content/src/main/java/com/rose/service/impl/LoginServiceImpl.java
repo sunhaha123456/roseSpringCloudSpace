@@ -73,7 +73,6 @@ public class LoginServiceImpl implements LoginService {
         if ("OPTIONS".equals(method.toUpperCase())) {
             return true;
         }
-        valueHolder.removeAll();
         String token = request.getHeader(SystemConstant.SYSTEM_TOKEN_NAME);
         String userId = request.getHeader(SystemConstant.SYSTEM_USER_ID);
         if (StringUtil.isEmpty(token)) {
