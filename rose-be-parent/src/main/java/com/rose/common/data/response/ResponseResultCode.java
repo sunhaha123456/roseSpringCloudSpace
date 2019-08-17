@@ -14,10 +14,11 @@ public enum ResponseResultCode {
 	PARAM_ERROR(40001, "参数错误！"),
 	LOGIC_ERROR(40002, "业务逻辑错误！"),
 
-	LOGIN_ERROR(40004, "用户名或密码错误！"),
-	CODE_ERROR(40005, "验证码错误！"),
-	LOGIN_FIRST(40006, "未登录，请先登录！"),
-	USER_STATE_ERROR(40007, "用户状态不正常！"),
+	LOGIN_ERROR(40003, "用户名或密码错误！"),
+	CODE_ERROR(40004, "验证码错误！"),
+	LOGIN_FIRST(40005, "未登录，请先登录！"),
+	USER_STATE_ERROR(40006, "用户状态不正常！"),
+	VALIDATE_ERROR(40007, "校验失败！"),
 	OPERT_ERROR(40008, "操作失败！");
 
 	private Integer code;

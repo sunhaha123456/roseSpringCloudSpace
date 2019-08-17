@@ -2,7 +2,6 @@ package com.rose.service;
 
 import com.rose.data.to.dto.UserLoginDto;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -11,6 +10,7 @@ import java.util.Map;
  * @date 2019
  */
 public interface LoginService {
+
     /**
      * 功能：登录
      * @param param
@@ -20,14 +20,17 @@ public interface LoginService {
     Map<String, Object> verify(UserLoginDto param) throws Exception;
 
     /**
-     * 功能：登出
-     * @throws Exception
+     * 功能：退出
+     * @param userId
+     * @param token
      */
-    void out() throws Exception;
+    void out(Long userId, String token);
 
     /**
      * 功能：token校验，若通过校验，并更新token有效时长
+     * @param userId
+     * @param token
      * @return true：通过校验，false：未通过校验
      */
-    boolean tokenValidate(HttpServletRequest request);
+    boolean tokenValidate(Long userId, String token);
 }

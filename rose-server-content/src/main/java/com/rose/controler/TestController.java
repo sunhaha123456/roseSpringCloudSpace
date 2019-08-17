@@ -1,6 +1,9 @@
 package com.rose.controler;
 
+import com.rose.common.data.response.ResponseResult;
 import com.rose.common.util.JsonUtil;
+import com.rose.data.to.dto.UserLoginDto;
+import com.rose.service.FeignLoginService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +33,9 @@ public class TestController {
     @Autowired
     @LoadBalanced
     private RestTemplate loadBalance;
+
+    @Inject
+    private FeignLoginService feignLoginService;
 
     /**
      * 功能：证明可以找到服务
@@ -91,5 +98,16 @@ public class TestController {
         map.put("code", "ddd");
         Map res = loadBalance.postForObject(targetUrl, map, Map.class);
         return res;
+    }
+
+    /**
+     * 功能：使用feign调用
+     * @return
+     */
+    @GetMapping("/test4")
+    public void test4() {
+        UserLoginDto dto = new UserLoginDto();
+        ResponseResult resp = feignLoginService.verify(dto);
+        System.out.println(1111);
     }
 }

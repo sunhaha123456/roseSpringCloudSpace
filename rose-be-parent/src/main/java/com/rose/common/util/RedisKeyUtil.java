@@ -1,4 +1,4 @@
-package com.rose.util;
+package com.rose.common.util;
 
 import com.rose.data.constant.SystemConstant;
 

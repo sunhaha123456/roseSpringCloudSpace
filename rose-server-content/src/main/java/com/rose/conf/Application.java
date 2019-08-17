@@ -3,8 +3,8 @@ package com.rose.conf;
 import com.rose.interceptor.LoginInterceptor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Primary;
@@ -19,12 +19,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 import tk.mybatis.spring.annotation.MapperScan;
 
 import javax.inject.Inject;
-import java.time.Duration;
 
 @RestController
 @ComponentScan("com.rose")
 @MapperScan("com.rose.dbopt.mapper")
 @SpringBootApplication
+@EnableFeignClients(basePackages = "com.rose.service")
 public class Application extends WebMvcConfigurationSupport {
 
     @Inject

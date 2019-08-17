@@ -3,7 +3,6 @@ package com.rose.interceptor;
 import com.alibaba.fastjson.JSONObject;
 import com.rose.common.data.response.ResponseResult;
 import com.rose.common.data.response.ResponseResultCode;
-import com.rose.service.LoginService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -24,15 +23,15 @@ import java.io.PrintWriter;
 @Slf4j
 public class LoginInterceptor implements HandlerInterceptor {
 
-    @Inject
-    private LoginService loginService;
+//    @Inject
+//    private LoginService loginService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
-        if (!loginService.tokenValidate(request)) {
-            getFail(response);
-            return false;
-        }
+//        if (!loginService.tokenValidate(request)) {
+//            getFail(response);
+//            return false;
+//        }
         return true;
     }
 
