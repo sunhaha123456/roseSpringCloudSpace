@@ -9,6 +9,31 @@
 （1）默认下是轮训
 （2）当配置成根据权重路由后，权重值越大，被选中的概率越大
      注意：权重被配置成0，将会永远不会被调用到
+3、restTemplate
+    超时时间：
+        默认永不超时，或者根据对方的超时设置
+        需自己手动设置链接超时时间 与 读取超时时间
+    重试机制：
+        失败后不进行重试
+4、feign
+    超时时间：
+        默认超时时间是2秒
+        已手动设置超时时间为15秒
+    重试机制：
+        失败后不进行重试
+    get方式传对象：
+        需要使用 @SpringQueryMap 注解
+    日志级别：
+        NONE，BASIC，HEADERS，FULL
+    日志java代码方式设置全文日志级别：
+@EnableFeignClients(basePackages = "com.rose.service.feign", defaultConfiguration = GlobalFeignConfiguration.class)
+
+public class GlobalFeignConfiguration {
+    @Bean
+    public Logger.Level level(){
+        return Logger.Level.BASIC;
+    }
+}
 
 
 

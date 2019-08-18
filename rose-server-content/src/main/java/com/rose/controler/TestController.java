@@ -107,7 +107,11 @@ public class TestController {
     @GetMapping("/test4")
     public void test4() {
         UserLoginDto dto = new UserLoginDto();
+        dto.setUname("111");
+        dto.setUpwd("222");
+        dto.setCode("333");
+        dto.setKey("444");
         ResponseResult resp = feignLoginService.verify(dto);
-        System.out.println(1111);
+        System.out.println(JsonUtil.objectToJson(resp));
     }
 }
