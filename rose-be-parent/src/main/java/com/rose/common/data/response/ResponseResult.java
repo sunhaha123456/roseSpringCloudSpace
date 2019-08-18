@@ -45,6 +45,8 @@ public class ResponseResult implements Serializable {
         return new ResponseResult(ResponseResultCode.SUCCESS.getCode(), ResponseResultCode.SUCCESS.getMsg(), data);
     }
 
+    public ResponseResult() {}
+
     public ResponseResult(Integer code, String msg, Object data) {
         this.code = code;
         this.msg = msg;

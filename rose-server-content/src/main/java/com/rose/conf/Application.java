@@ -24,7 +24,7 @@ import javax.inject.Inject;
 @ComponentScan("com.rose")
 @MapperScan("com.rose.dbopt.mapper")
 @SpringBootApplication
-@EnableFeignClients(basePackages = "com.rose.service")
+@EnableFeignClients(basePackages = "com.rose.service.feign")
 public class Application extends WebMvcConfigurationSupport {
 
     @Inject

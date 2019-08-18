@@ -2,8 +2,8 @@ package com.rose.controler;
 
 import com.rose.common.data.response.ResponseResult;
 import com.rose.common.util.JsonUtil;
+import com.rose.service.feign.FeignLoginService;
 import com.rose.data.to.dto.UserLoginDto;
-import com.rose.service.FeignLoginService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
