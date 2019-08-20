@@ -14,7 +14,7 @@ public interface SystemConstant {
     // redis中用户登录验证码保存时间 5分钟
     long LOGIN_CODE_SAVE_TIME = 5;
 
-    // 系统前后端交互中 token、userId key名
-    String SYSTEM_TOKEN_NAME = "token";
+    // 系统前后端交互中 userId、token key名
     String SYSTEM_USER_ID = "userId";
+    String SYSTEM_TOKEN_NAME = "token";
 }

@@ -1,9 +1,10 @@
 package com.rose.controler;
 
-import com.rose.common.repository.RedisRepositoryCustom;
-import com.rose.common.util.ValueHolder;
+import com.rose.common.util.HttpRequestUtil;
+import com.rose.common.util.StringUtil;
+import com.rose.data.constant.SystemConstant;
 import com.rose.data.to.dto.UserLoginDto;
-import com.rose.dbopt.mapper.TbSysUserMapper;
+import com.rose.service.LoginService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
 /**
  * 功能：登录 controller
@@ -24,41 +24,31 @@ import java.util.Map;
 public class LoginControler {
 
     @Inject
-    private TbSysUserMapper tbSysUserMapper;
-    @Inject
-    private RedisRepositoryCustom redisRepositoryCustom;
-    @Inject
-    private ValueHolder valueHolder;
+    private LoginService loginService;
 
     @GetMapping(value = "/toLogin")
     public String toLogin() {
         return "login";
     }
 
+    @ResponseBody
+    @PostMapping(value = "/verify")
+    public Object verify(@RequestBody @Validated(UserLoginDto.BaseInfo.class) UserLoginDto dto) throws Exception {
+        return loginService.verify(dto);
+    }
+
     @GetMapping(value = "/toSuccess")
-    public String toSuccess(HttpServletRequest request) throws Exception {
-//        if (loginService.tokenValidate(request)) {
-//            TbSysUser sysUser = tbSysUserMapper.selectByPrimaryKey(valueHolder.getUserIdHolder());
-//            if (sysUser != null) {
-//                request.setAttribute("uname", sysUser.getUname());
-//                return "home";
-//            }
-//        }
-        return "login";
+    public String toSuccess(HttpServletRequest request) {
+        return loginService.toSuccess(request);
     }
 
     @GetMapping(value = "/out")
-    public String out(HttpServletRequest request) throws Exception {
-//        if (loginService.tokenValidate(request)) {
-//            redisRepositoryCustom.delete(RedisKeyUtil.getRedisUserInfoKey(valueHolder.getUserIdHolder()));
-//        }
-        return "login";
-    }
-
-    @ResponseBody
-    @PostMapping(value = "/verify")
-    public Map verify(@RequestBody @Validated(UserLoginDto.BaseInfo.class) UserLoginDto param) throws Exception {
-//        return loginService.verify(param);
-        return null;
+    public String out(HttpServletRequest request) {
+        String userId = HttpRequestUtil.getValueByHeaderOrParam(request, SystemConstant.SYSTEM_USER_ID);
+        String token = HttpRequestUtil.getValueByHeaderOrParam(request, SystemConstant.SYSTEM_TOKEN_NAME);
+        if (StringUtil.isEmpty(userId) || StringUtil.isEmpty(token)) {
+            return "login";
+        }
+        return loginService.out(Long.valueOf(userId), token);
     }
 }

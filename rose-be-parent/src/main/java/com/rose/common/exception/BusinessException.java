@@ -1,5 +1,6 @@
 package com.rose.common.exception;
 
+import com.rose.common.data.response.ResponseResult;
 import com.rose.common.data.response.ResponseResultCode;
 
 /**
@@ -25,6 +26,11 @@ public class BusinessException extends RuntimeException {
     }
 
     public BusinessException(ResponseResultCode res) {
+        this.code = res.getCode();
+        this.msg = res.getMsg();
+    }
+
+    public BusinessException(ResponseResult res) {
         this.code = res.getCode();
         this.msg = res.getMsg();
     }

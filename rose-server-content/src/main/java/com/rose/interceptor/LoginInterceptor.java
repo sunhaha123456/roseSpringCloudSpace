@@ -3,6 +3,11 @@ package com.rose.interceptor;
 import com.alibaba.fastjson.JSONObject;
 import com.rose.common.data.response.ResponseResult;
 import com.rose.common.data.response.ResponseResultCode;
+import com.rose.common.exception.BusinessException;
+import com.rose.common.util.HttpRequestUtil;
+import com.rose.common.util.StringUtil;
+import com.rose.data.constant.SystemConstant;
+import com.rose.service.feign.FeignLoginService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -23,15 +28,26 @@ import java.io.PrintWriter;
 @Slf4j
 public class LoginInterceptor implements HandlerInterceptor {
 
-//    @Inject
-//    private LoginService loginService;
+    @Inject
+    private FeignLoginService feignLoginService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
-//        if (!loginService.tokenValidate(request)) {
-//            getFail(response);
-//            return false;
-//        }
+        String userId = HttpRequestUtil.getValueByHeaderOrParam(request, SystemConstant.SYSTEM_USER_ID);
+        String token = HttpRequestUtil.getValueByHeaderOrParam(request, SystemConstant.SYSTEM_TOKEN_NAME);
+        if (StringUtil.isEmpty(userId) || StringUtil.isEmpty(token)) {
+            log.error("参数错误！userId：{}，token：{}", userId, token);
+            return false;
+        }
+        ResponseResult res = feignLoginService.tokenValidate(Long.valueOf(userId), token);
+        if (res == null) {
+            log.error("交互失败！userId：{}，token：{}", userId, token);
+            return false;
+        }
+        if (!ResponseResultCode.SUCCESS.getCode().equals(res.getCode())) {
+            log.error("验证失败！userId：{}，token：{}", userId, token);
+            return false;
+        }
         return true;
     }
 
