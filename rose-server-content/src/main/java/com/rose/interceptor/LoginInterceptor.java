@@ -3,9 +3,9 @@ package com.rose.interceptor;
 import com.alibaba.fastjson.JSONObject;
 import com.rose.common.data.response.ResponseResult;
 import com.rose.common.data.response.ResponseResultCode;
-import com.rose.common.exception.BusinessException;
 import com.rose.common.util.HttpRequestUtil;
 import com.rose.common.util.StringUtil;
+import com.rose.common.util.ValueHolder;
 import com.rose.data.constant.SystemConstant;
 import com.rose.service.feign.FeignLoginService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +31,9 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Inject
     private FeignLoginService feignLoginService;
 
+    @Inject
+    private ValueHolder valueHolder;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
         String userId = HttpRequestUtil.getValueByHeaderOrParam(request, SystemConstant.SYSTEM_USER_ID);
@@ -48,6 +51,8 @@ public class LoginInterceptor implements HandlerInterceptor {
             log.error("验证失败！userId：{}，token：{}", userId, token);
             return false;
         }
+        valueHolder.setTokenHolder(token);
+        valueHolder.setUserIdHolder(Long.valueOf(userId));
         return true;
     }
 

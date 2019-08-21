@@ -26,7 +26,7 @@ public interface FeignLoginService {
      * @param userId
      * @param token
      */
-    @GetMapping(value = "/rose-gateway-server/out")
+    @GetMapping(value = "/rose-gateway-server/login/out")
     ResponseResult out(@RequestParam(value = "userId") Long userId, @RequestParam(value = "token") String token);
 
     /**
@@ -34,6 +34,6 @@ public interface FeignLoginService {
      * @param userId
      * @param token
      */
-    @GetMapping(value = "/rose-gateway-server/tokenValidate")
+    @GetMapping(value = "/rose-gateway-server/login/tokenValidate")
     ResponseResult tokenValidate(@RequestParam(value = "userId") Long userId, @RequestParam(value = "token") String token);
 }

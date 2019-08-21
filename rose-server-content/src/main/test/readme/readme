@@ -34,7 +34,8 @@ public class GlobalFeignConfiguration {
         return Logger.Level.BASIC;
     }
 }
-5、Sentinel github地址
+5、robbion 和 feign 都是懒加载模式
+6、Sentinel github地址
     https://github.com/alibaba/Sentinel
 
 

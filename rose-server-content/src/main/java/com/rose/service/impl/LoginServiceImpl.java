@@ -7,7 +7,6 @@ import com.rose.common.repository.RedisRepositoryCustom;
 import com.rose.common.util.HttpRequestUtil;
 import com.rose.common.util.RedisKeyUtil;
 import com.rose.common.util.StringUtil;
-import com.rose.common.util.ValueHolder;
 import com.rose.data.constant.SystemConstant;
 import com.rose.data.entity.TbSysUser;
 import com.rose.data.to.dto.UserLoginDto;
@@ -30,8 +29,6 @@ public class LoginServiceImpl implements LoginService {
     private TbSysUserMapper tbSysUserMapper;
     @Inject
     private RedisRepositoryCustom redisRepositoryCustom;
-    @Inject
-    private ValueHolder valueHolder;
 
     @Override
     public Object verify(UserLoginDto param) throws Exception {
@@ -59,7 +56,7 @@ public class LoginServiceImpl implements LoginService {
         if (!ResponseResultCode.SUCCESS.getCode().equals(res.getCode())) {
             return "login";
         }
-        TbSysUser sysUser = tbSysUserMapper.selectByPrimaryKey(valueHolder.getUserIdHolder());
+        TbSysUser sysUser = tbSysUserMapper.selectByPrimaryKey(userId);
         if (sysUser == null) {
             return "login";
         }

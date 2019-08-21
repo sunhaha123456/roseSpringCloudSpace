@@ -1,11 +1,11 @@
 package com.rose.controler;
 
-import com.rose.data.constant.SystemConstant;
 import com.rose.common.data.response.StringResponse;
 import com.rose.common.repository.RedisRepositoryCustom;
 import com.rose.common.util.IdUtil;
 import com.rose.common.util.Md5Util;
 import com.rose.common.util.StringUtil;
+import com.rose.data.constant.SystemConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
