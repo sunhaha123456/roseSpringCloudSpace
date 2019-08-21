@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" th:href="@{/static/easyui/themes/easy.common.css}"></link>
+    <script th:inline="javascript">
+        var contextPath = [[@{/}]];
+        var interceptorToken = [[${token}]];
+        var interceptorUserId = [[${userId}]];
+    </script>
+    <script th:src="@{/static/easyui/easy.common.js}"></script>
+    <script th:src="@{/static/myFun.js}"></script>
+    <script th:inline="none">
+        function addMqMsgShow() {
+            $('#mqMsgIntervalSecondAdd').val('3');
+            $('#manager_add').dialog('open');
+            $('#mqMsgContentAdd').focus();
+        }
+        function addMqMsgCommit() {
+            if ($('#manager_add').form('validate')) {
+                var mqMsgContentAdd = $('#mqMsgContentAdd').val();
+                var mqMsgRemarkAdd = $('#mqMsgRemarkAdd').val();
+                var mqMsgDestAddrAdd = $('#mqMsgDestAddrAdd').val();
+                var mqMsgIntervalSecond = $('#mqMsgIntervalSecondAdd').val();
+                var param = {
+                    "requestPushMsgContent": mqMsgContentAdd,
+                    "requestPushRemark": mqMsgRemarkAdd,
+                    "requestPushDestAddr": mqMsgDestAddrAdd,
+                    "requestPushIntervalSecond": mqMsgIntervalSecond
+                };
+                var result = ajaxSynchPostJson("user/mqMsgManage/handBuildMqMsg", param);
+                if (result.code == '200') {
+                    alertSuccess();
+                    $('#manager_add').dialog('close');
+                    searchMqMsg();
+                } else {
+                    alertWarn(result.msg);
+                }
+            }
+        }
+        function handPushMqMsg(){
+            $.messager.confirm('确认', '只有未推送成功的消息，才能手动推送！确认推送？', function(r){
+                if(r) {
+                    var rows = $('#manager').datagrid('getSelections');
+                    if (rows.length > 0) {
+                        var id = rows[0].id;
+                        var result = ajaxSynchGet("user/mqMsgManage/handPushMqMsg", {"id": id});
+                        if (result.code == '200') {
+                            alertSuccess();
+                            searchMqMsg();
+                        } else {
+                            alertWarn(result.msg);
+                        }
+                    } else {
+                        alertWarn('未选择记录！');
+                    }
+                }
+            });
+        }
+        function mqMsgDetailShow() {
+            var rows = $('#manager').datagrid('getSelections');
+            if (rows.length > 0) {
+                var id = rows[0].id;
+                var result = ajaxSynchGet("user/mqMsgManage/queryDetail", {"id": id});
+                if (result.code == '200') {
+                    var data = result.data;
+                    $("#msgDetailShowCreateDate").text(data.createDate);
+                    $("#msgDetailShowPushPlatform").text(data.requestPushPlatformStr);
+                    $("#msgDetailShowPushRemark").text(data.requestPushRemark);
+                    $("#msgDetailShowPushIntervalSecond").text(data.requestPushIntervalSecond);
+                    $("#msgDetailShowPushStatus").text(data.statusStr);
+                    $("#msgDetailShowPushTotalCount").text(data.totalPushCount);
+                    $("#msgDetailShowPushDestAddr").text(data.requestPushDestAddr);
+                    $("#msgDetailShowPushContent").text(data.requestPushMsgContent);
+                    $('#manager_msgDetailPushRecordGrid').datagrid('loadData', data.pushRecordList);
+                    $('#manager_msgDetailWindow').dialog('open');
+                } else {
+                    alertWarn(result.msg);
+                }
+            } else {
+                alertWarn('未选择记录！');
+            }
+        }
+        function searchMqMsg() {
+            var data = {
+                "startDate": $('#startDate').datetimebox('getValue'),
+                "endDate": $('#endDate').datetimebox('getValue'),
+                "requestPushPlatform": $('#requestPushPlatform').combobox('getValue'),
+                "pushStatus": $('#requestPushStatus').combobox('getValue'),
+                "requestPushMsgContent": $('#requestPushMsgContent').val(),
+                "page":1, "rows":10
+            };
+            var result = ajaxSynchPostJson("user/mqMsgManage/search", data);
+            if (result.code == '200') {
+                dataGridPageInit();
+                $('#manager').datagrid('loadData', result.data);
+            } else {
+                alertWarn(result.msg);
+            }
+        }
+
+        function dataGridInit() {
+            $('#manager').datagrid({
+                fit : true,
+                fitColumns : true,
+                striped : true,
+                rownumbers : true,
+                border : false,
+                pagination : true,
+                singleSelect:true,
+                toolbar : '#manager_tool',
+                columns : [[
+                    {
+                        field : 'id',
+                        width : 100,
+                        hidden : true
+                    },
+                    {
+                        field : 'createDate',
+                        title : '推送请求创建时间',
+                        width : 100,
+                    },
+                    {
+                        field : 'requestPushPlatformStr',
+                        title : '推送请求方平台',
+                        width : 100,
+                    },
+                    {
+                        field : 'requestPushIntervalSecond',
+                        title : '推送间隔时间',
+                        width : 100,
+                    },
+                    {
+                        field : 'requestPushMsgContent',
+                        title : '推送内容',
+                        width : 100,
+                        formatter: function(value,row,index){
+                            if (value != null && value.length > 20){
+                                return value.substring(0, 20) + '......';
+                            }
+                            return value;
+                        }
+                    },
+                    {
+                        field : 'status',
+                        title : '推送状态',
+                        width : 100,
+                        formatter: function(value,row,index){
+                            if (value == 0){
+                                return "未推送";
+                            } else if (value == 1){
+                                return "推送失败";
+                            } else if (value == 2){
+                                return "推送成功";
+                            } else {
+                                return "未知";
+                            }
+                        }
+                    }
+                ]]
+            });
+        }
+        function dataGridPageInit() {
+            var p = $('#manager').datagrid('getPager');
+            $(p).pagination({
+                pageNumber : 1,
+                pageSize : 10,
+                pageList : [10, 20, 30, 40, 50],
+                onSelectPage:function(pageNumber, pageSize){
+                    var data = {
+                        "startDate": $('#startDate').datetimebox('getValue'),
+                        "endDate": $('#endDate').datetimebox('getValue'),
+                        "requestPushPlatform": $('#requestPushPlatform').combobox('getValue'),
+                        "pushStatus": $('#requestPushStatus').combobox('getValue'),
+                        "requestPushMsgContent": $('#requestPushMsgContent').val(),
+                        "page":pageNumber, "rows":pageSize
+                    };
+                    var result = ajaxSynchPostJson("user/mqMsgManage/search", data);
+                    if (result.code == '200') {
+                        $('#manager').datagrid('loadData', result.data);
+                    }
+                },
+            });
+        }
+
+        function webPageInit() {
+            var requestPushPlatformData = [
+                {"key": "请选择", "value": "请选择"},
+                {"key": 0, "value": "人工手动构建消息"},
+                {"key": 1, "value": "xxx平台"},
+                {"key": 2, "value": "yyy平台"},
+                {"key": 3, "value": "zzz平台"}
+            ];
+            $('#requestPushPlatform').combobox('loadData', requestPushPlatformData);
+        }
+
+        $(function () {
+            webPageInit();
+            dataGridInit();
+            searchMqMsg();
+        });
+    </script>
+</head>
+<body>
+<table id="manager">
+    <div id="manager_tool">
+        <div style="margin-bottom:5px;">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add-green" plain="true" onclick="addMqMsgShow()">手动构建消息</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-ok" plain="true" onclick="handPushMqMsg()">手动推送消息</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-edit-yellow" plain="true" onclick="mqMsgDetailShow()">查看详情</a>
+        </div>
+        <div style="padding:0 0 0 7px;color:#333;">
+            开始时间：<input type="text" class="easyui-datetimebox" id="startDate" style="width:165px" />&nbsp;&nbsp;
+            结束时间：<input type="text" class="easyui-datetimebox" id="endDate" style="width:165px" />&nbsp;&nbsp;
+            推送平台：<select class="easyui-combobox" id="requestPushPlatform" style="width:125px;" data-options="valueField:'key',textField:'value'">
+                        <option value="请选择" selected="true" />
+                      </select>&nbsp;&nbsp;
+            推送状态：<select class="easyui-combobox" id="requestPushStatus" style="width:125px;" data-options="valueField:'key',textField:'value'">
+                        <option value="全部" selected="true">全部</option>
+                        <option value="0">未推送</option>
+                        <option value="1">推送失败</option>
+                        <option value="2">推送成功</option>
+                      </select>&nbsp;&nbsp;<br />
+            消息内容：<input type="text" class="textbox" id="requestPushMsgContent" style="width:595px" />&nbsp;&nbsp;
+            <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="searchMqMsg()">查询</a>
+        </div>
+    </div>
+</table>
+
+<form id="manager_add" class="easyui-dialog" style="margin:0;padding:5px 0 0 25px;color:#333;"
+      data-options="top:150,width:500,title:'手动构建消息',modal:true,closed:true,cache:false,iconCls:'icon-user-add',
+       onClose:function () {
+            $('#manager_add').form('reset');
+       },
+		buttons:[{
+					text : '提交',
+					iconCls : 'icon-add-green',
+					handler : function () {
+                    addMqMsgCommit();
+					}
+				},{
+					text:'关闭',
+					iconCls : 'icon-redo',
+					handler:function(){
+                    $('#manager_add').dialog('close');
+					}
+				}]">
+    <p>消息内容：<input class="easyui-validatebox" data-options="required:true,validType:'length[1,490]',missingMessage:'请输入消息内容',invalidMessage:'消息内容长度至少为1位'," type="text" id="mqMsgContentAdd" style="width:450px;" /></p>
+    <p>备&nbsp;&nbsp;&nbsp;&nbsp;注：<input class="easyui-validatebox" type="text" id="mqMsgRemarkAdd" style="width:450px;" /></p>
+    <p>目的地址：<input class="easyui-validatebox" data-options="required:true,validType:'length[1,250]',missingMessage:'请输入目的地址',invalidMessage:'目的地址长度至少为1位'," type="text" id="mqMsgDestAddrAdd" style="width:450px;" /></p>
+    <p>间隔时间(秒)：<input class="easyui-validatebox" data-options="required:true,validType:'length[1,10]',missingMessage:'请输入间隔时间（最小值为3）',invalidMessage:'间隔时间长度至少为1位'," type="text" id="mqMsgIntervalSecondAdd" style="width:450px;" /></p>
+</form>
+<div id="manager_msgDetailWindow" class="easyui-window" style="background-color:#F4F4F4;" data-options="top:150,width:900,title:'查看',modal:true,closed:true,iconCls:'icon-user-add',cache:false,collapsible:false,minimizable:false,maximizable:false">
+    <div id="manager_msgDetailInfoPanel">
+        <p>推送请求创建时间：<span id="msgDetailShowCreateDate" ></span>&nbsp;&nbsp;&nbsp;&nbsp;推送请求方平台：<span id="msgDetailShowPushPlatform"></span>&nbsp;&nbsp;&nbsp;&nbsp;推送方备注：<span id="msgDetailShowPushRemark"></span></p>
+        <p>推送间隔时间(秒)：<span id="msgDetailShowPushIntervalSecond"></span>&nbsp;&nbsp;&nbsp;&nbsp;推送状态：<span id="msgDetailShowPushStatus"></span>&nbsp;&nbsp;&nbsp;&nbsp;累计推送次数：<span id="msgDetailShowPushTotalCount"></span>&nbsp;&nbsp;&nbsp;&nbsp;请求送达地址：<span id="msgDetailShowPushDestAddr"></span></p>
+        <p>推送内容：<span id="msgDetailShowPushContent"></span></p>
+    </div>
+    <table id="manager_msgDetailPushRecordGrid" class="easyui-datagrid" data-options="fit:false,fitColumns:true,striped:true,rownumbers:true,border:false,singleSelect:true,pagination:false">
+        <thead>
+        <tr>
+            <th data-options="field:'createDate',width:80">推送时间</th>
+            <th data-options="field:'pushTypeStr',width:50">推送类别</th>
+            <th data-options="field:'status',width:50,
+                    formatter: function(value,row,index){
+                        if (value == 0){
+                            return '推送失败';
+                        } else if (value == 1) {
+                            return '推送成功';
+                        } else {
+                            return '未知';
+                        }
+                    }">状态</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+</body>
+</html>

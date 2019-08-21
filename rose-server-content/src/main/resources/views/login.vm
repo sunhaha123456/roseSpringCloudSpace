@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>欢迎使用，请登录！</title>
+    <meta charset="UTF-8" />
+    <style th:inline="text">
+        #container{ width:500px;}
+        #container table td{ line-height:34px; font-size:12px;}
+        body{
+            background: url([[@{/static/img/loginBg.jpg}]]) no-repeat fixed 0 0;
+            background-size:100% 100%;
+        }
+    </style>
+    <link rel="stylesheet" th:href="@{/static/formvalidator/style/validator.css}"></link>
+    <script th:inline="javascript">
+        var contextPath = [[@{/}]];
+        var interceptorToken = null;
+        var interceptorUserId = null;
+    </script>
+    <script th:src="@{/static/jquery-1.7.1.min.js}"></script>
+    <script th:src="@{/static/formvalidator/formValidator-4.0.1.js}"></script>
+    <script th:src="@{/static/formvalidator/formValidatorRegex.js}"></script>
+    <script th:src="@{/static/myFun.js}"></script>
+    <script th:inline="javascript">
+        var key = null;
+        function funOk() {
+            if ($.formValidator.pageIsValid('1')) {
+                var params = {"uname": $('#uname').val(), "upwd" : $('#upwd').val(), "code" : $('#code').val(), "key"  : key};
+                var res = ajaxSynchPostJson("login/verify", params);
+                if (res.code == "200") {
+                    interceptorToken = res.data.token;
+                    interceptorUserId = res.data.userId;
+                    window.location.href = urlHandleContext("login/toSuccess");
+                } else {
+                    $("#id_name").html(res.msg).show(300).delay(1200).hide(300);
+                    $("#randimg").click()
+                }
+            }
+        }
+        $(function () {
+            $.formValidator.initConfig({
+                formID	: "form1",
+                debug	: false,
+                submitOnce:false,
+                onError :function(msg, obj, errorlist){
+                    $("#errorlist").empty();
+                    $.map(errorlist,function(msg){
+                        //$("#errorlist").append("<li>" + msg + "</li>")
+                    });
+                    //alert(msg);
+                },
+                submitAfterAjaxPrompt : '有数据正在异步验证，请稍等...',
+            });
+            $("#uname").formValidator({onShow:"请输入用户名",onFocus:"至少1个长度",onCorrect:"用户名合法"}).inputValidator({min:1,empty:{leftEmpty:false,rightEmpty:false,emptyError:"用户名两边不能有空符号"},onError:"用户名不能为空"});
+            $("#upwd").formValidator({onShow:"请输入密码",onFocus:"至少6个长度",onCorrect:"密码合法"}).inputValidator({min:6,empty:{leftEmpty:false,rightEmpty:false,emptyError:"密码两边不能有空符号"},onError:"密码不能为空"});
+            $("#code").formValidator({onShow:"",onFocus:"",onCorrect:""}).inputValidator({min:4,max:4,onError:"4"}).regexValidator({regExp:"^(([[0-9]{4,4}))(]?)$",onError:""});
+
+            $(window).resize(function(){
+                $("#container").css({
+                    position: "absolute",
+                    top: ($(window).height() - $("#container").outerHeight())/2 - 165,
+                    left: ($(window).width() - $("#container").outerWidth())/2 - 65
+                });
+            });
+            $(window).resize();
+
+            var res = ajaxSynchGet("tool/getOnlySign", null);
+            if (res.code == "200") {
+                key = res.data.response;
+                $("#randimg").attr('src', urlHandleContext("tool/randImg/getLoginCode") + "&key=" + key);
+                $("#randimg").click(function(){this.src = urlHandleContext("tool/randImg/getLoginCode") + "&key=" + key;});
+            }
+        });
+    </script>
+</head>
+<body>
+<div id="container">
+    <form action="#" method="post" id="form1">
+        <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
+            <tr>
+                <td width="114" align="right" valign="middle"></td>
+                <td align="left" width="210"><input name="uname" type="text" id="uname" size="30" placeholder="用户名" value="superAdmin" /></td>
+                <td width="286"><div id="unameTip"></div></td>
+            </tr>
+            <tr>
+                <td align="right" valign="middle"></td>
+                <td align="left"><input name="upwd" type="password" id="upwd" size="30" placeholder="密码" value="123456" /></td>
+                <td><div id="upwdTip"></div></td>
+            </tr>
+            <tr>
+                <td align="right" valign="middle"></td>
+                <td align="left" colspan="2">
+                    <table width="300" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="76"><input name="code" id="code" type="text" size="10" placeholder="验证码" /></td>
+                            <td width="85"><img name="randimg" id="randimg" alt="验证码" style="cursor:pointer;" /></td>
+                            <td width="139"><u>&nbsp;看不清，点击图片</u></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td align="left"><input type="button" id="ok" name="ok" onclick="funOk();" value="登陆" style=" width:120px;" /></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td align="left"><span id="id_name"></span></td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>

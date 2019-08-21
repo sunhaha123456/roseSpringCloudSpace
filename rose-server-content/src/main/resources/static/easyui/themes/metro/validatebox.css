@@ -1,0 +1,8 @@
+.validatebox-invalid {
+  background-image: url('images/validatebox_warning.png');
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-color: #fff;
+  color: #000;
+  border-color: #95B8E7;
+}
