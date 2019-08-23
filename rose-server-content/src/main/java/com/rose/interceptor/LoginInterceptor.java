@@ -51,6 +51,8 @@ public class LoginInterceptor implements HandlerInterceptor {
             log.error("验证失败！userId：{}，token：{}", userId, token);
             return false;
         }
+        request.setAttribute(SystemConstant.SYSTEM_TOKEN_NAME, token);
+        request.setAttribute(SystemConstant.SYSTEM_USER_ID, userId);
         valueHolder.setTokenHolder(token);
         valueHolder.setUserIdHolder(Long.valueOf(userId));
         return true;
