@@ -1,6 +1,8 @@
 package com.rose.aspect;
 
 import com.rose.common.util.JsonUtil;
+import com.rose.common.util.ValueHolder;
+import com.rose.data.base.BaseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -10,6 +12,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.BindingResult;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -25,6 +28,9 @@ import java.util.List;
 @Aspect
 @Configuration
 public class SysLogAspect {
+
+    @Inject
+    private ValueHolder valueHolder;
 
     private long startTime = 0; // 开始时间
 
@@ -47,6 +53,11 @@ public class SysLogAspect {
                 param = new ArrayList(point.getArgs().length);
                 for (Object p : point.getArgs()) {
                     if (!(p instanceof HttpServletRequest) && !(p instanceof HttpServletResponse) && !(p instanceof BindingResult)) {
+                        if (p instanceof BaseDto) {
+                            BaseDto dto = (BaseDto) p;
+                            dto.setUserId(valueHolder.getUserIdHolder());
+                            dto.setToken(valueHolder.getTokenHolder());
+                        }
                         param.add(p);
                     }
                 }

@@ -1,15 +1,25 @@
 package com.rose.controler;
 
+import com.alibaba.csp.sentinel.Entry;
+import com.alibaba.csp.sentinel.SphU;
+import com.alibaba.csp.sentinel.Tracer;
+import com.alibaba.csp.sentinel.context.ContextUtil;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.rose.common.data.response.ResponseResult;
+import com.rose.common.data.response.ResponseResultCode;
+import com.rose.common.exception.SentinelCaputeException;
 import com.rose.common.util.JsonUtil;
-import com.rose.service.feign.FeignLoginService;
+import com.rose.data.base.BaseDto;
 import com.rose.data.to.dto.UserLoginDto;
+import com.rose.service.feign.FeignLoginService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -114,4 +124,105 @@ public class TestController {
         ResponseResult resp = feignLoginService.verify(dto);
         System.out.println(JsonUtil.objectToJson(resp));
     }
+
+    // -------------- sentinel 限流、降级
+
+    // -------------- sentinel 限流、降级 第一种方式
+
+    @PostMapping("/user/sentinelTest1")
+    public Object sentinelTest1(@RequestBody BaseDto dto) throws BlockException {
+        Entry entry = null;
+        try {
+            // 定义sentinel 资源标志名称
+            String sentinelFlagName = "user-sentinelTest1";
+            ContextUtil.enter(sentinelFlagName);
+            entry = SphU.entry(sentinelFlagName);
+            // 被保护的业务逻辑
+            Map<String, Object> map = new HashMap<>();
+            map.put("msg", "success");
+            return map;
+            //需要降级处理时，抛此异常
+            //throw new SentinelCaputeException(ResponseResultCode.OPERT_ERROR);
+        } catch (BlockException e) {
+            // 如果被保护的资源被限流或者降级了，就会抛BlockException
+            log.error("接口-/user/sentinelTest1，发生了限流，或者降级了，原因：{}", e);
+            throw e;
+        } catch (SentinelCaputeException e) {
+            // 统计SentinelCaputeException【发生的次数、发生占比...】
+            Tracer.trace(e);
+            throw e;
+        } finally {
+            // 退出 sentinel
+            if (entry != null) {
+                entry.exit();
+            }
+            ContextUtil.exit();
+        }
+    }
+
+    // -------------- sentinel 限流、降级 第二种方式
+
+//    @PostMapping("/user/sentinelTest2")
+//    @SentinelResource(value = "user-sentinelTest2", blockHandler = "blockHandle")
+//    public Object sentinelTest2(@RequestBody BaseDto dto) throws FlowException {
+//        try {
+//            Map<String, Object> map = new HashMap<>();
+//            map.put("msg", "success");
+//            throw new SentinelCaptureException();
+//        } catch (SentinelCaptureException e) {
+//            Tracer.trace(e);
+//            throw new SentinelCaptureException();
+//        }
+//    }
+
+//    public Object blockHandle(BaseDto dto, BlockException e) throws BlockException {
+//        log.error("接口-/user/sentinelTest2，被限流或降级了，blockException：{}", e);
+//
+//        throw new RuntimeException("/user/sentinelTest2，被限流或降级了");
+//    }
+//
+//    @GetMapping("/sentinelTest")
+//    @SentinelResource(value = "/sentinelTest",
+//            blockHandler = "sentinelTestBlockHandler",  // 限流
+//            fallback = "sentinelTestFallback")          // 降级
+//    public Object sentinelTest(@RequestParam(required = false) String param1, @RequestParam(required = false) String param2) {
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("msg", "success");
+//        return map;
+//    }
+//
+//    public Object sentinelTestBlockHandler(String param1, String param2, BlockException e) {
+//        // 处理一些具体也的业务
+//        // 比如发送报警短信
+//        throw new BusinessException(ResponseResultCode.SERVER_BUSY_ERROE);
+//    }
+//
+//    public Object sentinelTestFallback(String param1, String param2) {
+//        // 处理一些具体也的业务
+//        // 比如发送报警短信
+//        throw new BusinessException(ResponseResultCode.SERVER_BUSY_ERROE);
+//    }
+
+    //package com.rose.conf;
+//
+//import com.alibaba.csp.sentinel.slots.block.BlockException;
+//import com.rose.data.base.BaseDto;
+//import lombok.extern.slf4j.Slf4j;
+//
+//@Slf4j
+//public class SentinelBlockHandler {
+//
+//    /**
+//     * 功能：处理限流
+//     * @param dto
+//     * @param e
+//     * @return
+//     */
+//    public static Object blockHandle(BaseDto dto, BlockException e) throws BlockException {
+//        String url = dto.getRequestUrl();
+//        log.error("requestUrl：{}，被限流了，blockException：{}", url, e);
+//
+//        throw new RuntimeException(url + " 被限流了");
+//    }
+//}
 }

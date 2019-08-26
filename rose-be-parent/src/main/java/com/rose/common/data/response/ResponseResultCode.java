@@ -10,6 +10,7 @@ public enum ResponseResultCode {
 	SUCCESS(200, "成功！"),
 
 	SERVER_ERROR(500, "服务器异常！"),
+	SERVER_BUSY_ERROE(501, "服务器繁忙，请稍后重试！"),
 
 	PARAM_ERROR(40001, "参数错误！"),
 	LOGIC_ERROR(40002, "业务逻辑错误！"),

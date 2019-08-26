@@ -1,8 +1,10 @@
 package com.rose.advice;
 
+import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.rose.common.data.response.ResponseResult;
 import com.rose.common.data.response.ResponseResultCode;
 import com.rose.common.exception.BusinessException;
+import com.rose.common.exception.SentinelCaputeException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -36,14 +38,28 @@ public class ExceptionControllerAdvice implements ResponseBodyAdvice<Object> {
     @ResponseBody
     @ExceptionHandler()
     public Object handler(BusinessException e) {
-        log.error("返回错误信息：{}", e.msg);
+        log.error("【BusinessException】返回错误信息：{}", e.msg);
+        return ResponseResult.build(e.code, e.msg);
+    }
+
+    @ResponseBody
+    @ExceptionHandler()
+    public Object handler(BlockException e) {
+        log.error("【BlockException】返回错误信息：{}", e);
+        return ResponseResult.build(ResponseResultCode.SERVER_BUSY_ERROE);
+    }
+
+    @ResponseBody
+    @ExceptionHandler()
+    public Object handler(SentinelCaputeException e) {
+        log.error("【SentinelCaputeException】返回错误信息：{}", e);
         return ResponseResult.build(e.code, e.msg);
     }
 
     @ResponseBody
     @ExceptionHandler()
     public Object handler(Exception e) {
-    	log.error("系统异常！原因：{}", e);
+    	log.error("【Exception】返回错误信息：{}", e);
         return ResponseResult.build(ResponseResultCode.SERVER_ERROR);
     }
 }

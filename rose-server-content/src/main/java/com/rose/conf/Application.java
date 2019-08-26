@@ -1,6 +1,7 @@
 package com.rose.conf;
 
 import com.rose.interceptor.LoginInterceptor;
+import com.rose.interceptor.SessionIdInterceptor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -27,7 +28,8 @@ import javax.inject.Inject;
 @SpringBootApplication
 @EnableFeignClients(basePackages = "com.rose.service.feign")
 public class Application extends WebMvcConfigurationSupport {
-
+    @Inject
+    private SessionIdInterceptor sessionIdInterceptor;
     @Inject
     private LoginInterceptor loginInterceptor;
 
@@ -43,6 +45,7 @@ public class Application extends WebMvcConfigurationSupport {
     //拦截器
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(sessionIdInterceptor).addPathPatterns("/**");
         registry.addInterceptor(loginInterceptor).addPathPatterns("/user/**");
     }
 

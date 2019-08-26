@@ -36,19 +36,23 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
+        String url = request.getRequestURI();
         String userId = HttpRequestUtil.getValueByHeaderOrParam(request, SystemConstant.SYSTEM_USER_ID);
         String token = HttpRequestUtil.getValueByHeaderOrParam(request, SystemConstant.SYSTEM_TOKEN_NAME);
         if (StringUtil.isEmpty(userId) || StringUtil.isEmpty(token)) {
-            log.error("参数错误！userId：{}，token：{}", userId, token);
+            log.error("参数错误！url：{}，userId：{}，token：{}", url, userId, token);
+            getFail(response);
             return false;
         }
         ResponseResult res = feignLoginService.tokenValidate(Long.valueOf(userId), token);
         if (res == null) {
-            log.error("交互失败！userId：{}，token：{}", userId, token);
+            log.error("交互失败！url：{}，userId：{}，token：{}", url, userId, token);
+            getFail(response);
             return false;
         }
         if (!ResponseResultCode.SUCCESS.getCode().equals(res.getCode())) {
-            log.error("验证失败！userId：{}，token：{}", userId, token);
+            log.error("验证失败！url：{}，userId：{}，token：{}", url, userId, token);
+            getFail(response);
             return false;
         }
         request.setAttribute(SystemConstant.SYSTEM_TOKEN_NAME, token);

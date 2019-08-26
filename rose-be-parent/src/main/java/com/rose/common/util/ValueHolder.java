@@ -23,11 +23,7 @@ public class ValueHolder {
     }
 
     public void setTokenHolder(String token) {
-        if (StringUtil.isEmpty(token)) {
-            this.tokenHolder.set(null);
-        } else {
-            this.tokenHolder.set(token);
-        }
+        this.tokenHolder.set(token);
     }
 
     public String getTokenHolder() {

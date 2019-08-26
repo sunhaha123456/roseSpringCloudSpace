@@ -35,10 +35,25 @@ public class GlobalFeignConfiguration {
     }
 }
 5、robbion 和 feign 都是懒加载模式
-6、Sentinel github地址
-    https://github.com/alibaba/Sentinel
+6、Sentinel
+    github地址：https://github.com/alibaba/Sentinel
+    默认情况下，数据存储规则
+        当服务停止后，sentinel控制台左侧服务列表中，服务会存储5分钟时间，
+        但是，对应的限流和降级规则，会瞬间丢失
+    在降级RT规则中，默认的最大值是4900ms
+        通过 -Dcsp.sentinel.statistic.max.rt=xxx修改
+    当代码中进行SentinelResource注解配置时，value值一定不要与请求路径一直，且控制台操作时，要对于value完全一致的行进行操作，不然会出神奇情况
+    当代码中未进行SentinelResource注解配置时，在控制台对接口进行限流设置，正常操作就行
 
 
 
-=========================================
+
+
+
+
+实现sentinel限流与服务降级   8-14
+是否支持事务
+实现sentinel持久化
+==================================================================================
 nacos 的集群配置
+Nginx处理
