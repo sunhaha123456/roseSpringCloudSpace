@@ -16,6 +16,7 @@ import com.alibaba.csp.sentinel.slots.system.SystemRuleManager;
 import com.alibaba.csp.sentinel.transport.util.WritableDataSourceRegistry;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,15 +25,17 @@ import java.util.List;
 /**
  * 拉模式规则持久化
  *
- * @author itmuch.com
+ * @author 大目
  */
+@Slf4j
 public class FileDataSourceInit implements InitFunc {
+
     @Override
     public void init() throws Exception {
         // TIPS: 如果你对这个路径不喜欢，可修改为你喜欢的路径
         String ruleDir = System.getProperty("user.home") + "/sentinel/rules";
-        String flowRulePath = ruleDir + "/flow-rule.json";
-        String degradeRulePath = ruleDir + "/degrade-rule.json";
+        String flowRulePath = ruleDir + "/flow-rule.json";          // 限流规则
+        String degradeRulePath = ruleDir + "/degrade-rule.json";    // 降级规则
         String systemRulePath = ruleDir + "/system-rule.json";
         String authorityRulePath = ruleDir + "/authority-rule.json";
         String paramFlowRulePath = ruleDir + "/param-flow-rule.json";
@@ -107,6 +110,8 @@ public class FileDataSourceInit implements InitFunc {
             this::encodeJson
         );
         ModifyParamFlowRulesCommandHandler.setWritableDataSource(paramFlowRuleWDS);
+
+        log.info("sentinel 流控规则存在目录：{}", ruleDir);
     }
 
     private Converter<String, List<FlowRule>> flowRuleListParser = source -> JSON.parseObject(
