@@ -47,13 +47,10 @@ public class GlobalFeignConfiguration {
 
 
 
-
-
-
-
-实现sentinel限流与服务降级   8-14
-是否支持事务
-实现sentinel持久化
 ==================================================================================
-nacos 的集群配置
+实现sentinel持久化
+是否支持事务
+网关
 Nginx处理
+
+nacos 的集群配置

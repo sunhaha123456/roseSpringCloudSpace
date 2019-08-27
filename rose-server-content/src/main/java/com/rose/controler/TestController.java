@@ -142,7 +142,7 @@ public class TestController {
             map.put("msg", "success");
             return map;
             //需要降级处理时，抛此异常
-            //throw new SentinelCaputeException(ResponseResultCode.OPERT_ERROR);
+//            throw new SentinelCaputeException(ResponseResultCode.OPERT_ERROR);
         } catch (BlockException e) {
             // 如果被保护的资源被限流或者降级了，就会抛BlockException
             log.error("接口-/user/sentinelTest1，发生了限流，或者降级了，原因：{}", e);
