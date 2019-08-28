@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.rose.common.data.response.ResponseResult;
 import com.rose.common.data.response.ResponseResultCode;
 import com.rose.common.util.HttpRequestUtil;
-import com.rose.common.util.StringUtil;
 import com.rose.common.util.ValueHolder;
 import com.rose.data.constant.SystemConstant;
 import com.rose.service.feign.FeignLoginService;
@@ -39,6 +38,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         String url = request.getRequestURI();
         String userId = HttpRequestUtil.getValueByHeaderOrParam(request, SystemConstant.SYSTEM_USER_ID);
         String token = HttpRequestUtil.getValueByHeaderOrParam(request, SystemConstant.SYSTEM_TOKEN_NAME);
+        /*
         if (StringUtil.isEmpty(userId) || StringUtil.isEmpty(token)) {
             log.error("参数错误！url：{}，userId：{}，token：{}", url, userId, token);
             getFail(response);
@@ -55,6 +55,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             getFail(response);
             return false;
         }
+        */
         request.setAttribute(SystemConstant.SYSTEM_TOKEN_NAME, token);
         request.setAttribute(SystemConstant.SYSTEM_USER_ID, userId);
         valueHolder.setTokenHolder(token);
