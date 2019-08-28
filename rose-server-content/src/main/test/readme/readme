@@ -55,7 +55,10 @@ public class GlobalFeignConfiguration {
         这段时间就是延迟。
 
 ==================================================================================
-网关
+SpringCloudGateway
+    日志记录
+    限流
+    权限校验
 Nginx处理
 
 nacos 的集群配置
