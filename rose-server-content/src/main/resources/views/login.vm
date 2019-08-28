@@ -7,20 +7,20 @@
         #container{ width:500px;}
         #container table td{ line-height:34px; font-size:12px;}
         body{
-            background: url([[@{/static/img/loginBg.jpg}]]) no-repeat fixed 0 0;
+            background: url([[@{/rose-content-server/static/img/loginBg.jpg}]]) no-repeat fixed 0 0;
             background-size:100% 100%;
         }
     </style>
-    <link rel="stylesheet" th:href="@{/static/formvalidator/style/validator.css}"></link>
+    <link rel="stylesheet" th:href="@{/rose-content-server/static/formvalidator/style/validator.css}"></link>
     <script th:inline="javascript">
-        var contextPath = [[@{/}]];
+        var contextPath = "/rose-content-server/";
         var interceptorToken = null;
         var interceptorUserId = null;
     </script>
-    <script th:src="@{/static/jquery-1.7.1.min.js}"></script>
-    <script th:src="@{/static/formvalidator/formValidator-4.0.1.js}"></script>
-    <script th:src="@{/static/formvalidator/formValidatorRegex.js}"></script>
-    <script th:src="@{/static/myFun.js}"></script>
+    <script th:src="@{/rose-content-server/static/jquery-1.7.1.min.js}"></script>
+    <script th:src="@{/rose-content-server/static/formvalidator/formValidator-4.0.1.js}"></script>
+    <script th:src="@{/rose-content-server/static/formvalidator/formValidatorRegex.js}"></script>
+    <script th:src="@{/rose-content-server/static/myFun.js}"></script>
     <script th:inline="javascript">
         var key = null;
         function funOk() {

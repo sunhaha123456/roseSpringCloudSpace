@@ -82,7 +82,7 @@ public class TestController {
         List<String> targetUrlList = list.stream().map(o -> o.getUri().toString()).collect(Collectors.toList());
         System.out.println(JsonUtil.objectToJson(targetUrlList));
         String targetUrl = targetUrlList.get(0);
-        targetUrl = targetUrl + "/rose-login-server/login/verify";
+        targetUrl = targetUrl + "/login/verify";
         Map map = new HashMap<>();
         map.put("uname", "aaa");
         map.put("upwd", "bbb");
@@ -100,7 +100,7 @@ public class TestController {
      */
     @GetMapping("/test3")
     public Map test3() {
-        String targetUrl = "http://rose-login-server/rose-login-server/login/verify";
+        String targetUrl = "http://rose-login-server/login/verify";
         Map map = new HashMap<>();
         map.put("uname", "aaa");
         map.put("upwd", "bbb");

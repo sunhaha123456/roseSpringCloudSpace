@@ -18,7 +18,7 @@ public interface FeignLoginService {
      * @return
      * @throws Exception
      */
-    @PostMapping(value = "/rose-login-server/login/verify")
+    @PostMapping(value = "/login/verify")
     ResponseResult verify(@RequestBody UserLoginDto param);
 
     /**
@@ -26,7 +26,7 @@ public interface FeignLoginService {
      * @param userId
      * @param token
      */
-    @GetMapping(value = "/rose-login-server/login/out")
+    @GetMapping(value = "/login/out")
     ResponseResult out(@RequestParam(value = "userId") Long userId, @RequestParam(value = "token") String token);
 
     /**
@@ -34,6 +34,6 @@ public interface FeignLoginService {
      * @param userId
      * @param token
      */
-    @GetMapping(value = "/rose-login-server/login/tokenValidate")
+    @GetMapping(value = "/login/tokenValidate")
     ResponseResult tokenValidate(@RequestParam(value = "userId") Long userId, @RequestParam(value = "token") String token);
 }
