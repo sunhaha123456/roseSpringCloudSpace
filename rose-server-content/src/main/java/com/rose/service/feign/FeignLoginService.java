@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "rose-gateway-server")
+@FeignClient(name = "rose-login-server")
 public interface FeignLoginService {
 
     /**
@@ -18,7 +18,7 @@ public interface FeignLoginService {
      * @return
      * @throws Exception
      */
-    @PostMapping(value = "/rose-gateway-server/login/verify")
+    @PostMapping(value = "/rose-login-server/login/verify")
     ResponseResult verify(@RequestBody UserLoginDto param);
 
     /**
@@ -26,7 +26,7 @@ public interface FeignLoginService {
      * @param userId
      * @param token
      */
-    @GetMapping(value = "/rose-gateway-server/login/out")
+    @GetMapping(value = "/rose-login-server/login/out")
     ResponseResult out(@RequestParam(value = "userId") Long userId, @RequestParam(value = "token") String token);
 
     /**
@@ -34,6 +34,6 @@ public interface FeignLoginService {
      * @param userId
      * @param token
      */
-    @GetMapping(value = "/rose-gateway-server/login/tokenValidate")
+    @GetMapping(value = "/rose-login-server/login/tokenValidate")
     ResponseResult tokenValidate(@RequestParam(value = "userId") Long userId, @RequestParam(value = "token") String token);
 }

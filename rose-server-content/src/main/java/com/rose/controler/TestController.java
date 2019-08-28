@@ -56,7 +56,7 @@ public class TestController {
         // 查询指定服务的所有实例的信息
         // consul/eureka/zookeeper...
         List<ServiceInstance> list = new ArrayList<>();
-        List<ServiceInstance> list1 =  this.discoveryClient.getInstances("rose-gateway-server");
+        List<ServiceInstance> list1 =  this.discoveryClient.getInstances("rose-login-server");
         List<ServiceInstance> list2 =  this.discoveryClient.getInstances("rose-content-server");
         List<ServiceInstance> list3 =  this.discoveryClient.getInstances("rose-content-server-aaa");
         list.addAll(list1);
@@ -82,7 +82,7 @@ public class TestController {
         List<String> targetUrlList = list.stream().map(o -> o.getUri().toString()).collect(Collectors.toList());
         System.out.println(JsonUtil.objectToJson(targetUrlList));
         String targetUrl = targetUrlList.get(0);
-        targetUrl = targetUrl + "/rose-gateway-server/login/verify";
+        targetUrl = targetUrl + "/rose-login-server/login/verify";
         Map map = new HashMap<>();
         map.put("uname", "aaa");
         map.put("upwd", "bbb");
@@ -100,7 +100,7 @@ public class TestController {
      */
     @GetMapping("/test3")
     public Map test3() {
-        String targetUrl = "http://rose-gateway-server/rose-gateway-server/login/verify";
+        String targetUrl = "http://rose-login-server/rose-login-server/login/verify";
         Map map = new HashMap<>();
         map.put("uname", "aaa");
         map.put("upwd", "bbb");
