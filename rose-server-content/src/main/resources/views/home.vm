@@ -3,22 +3,22 @@
 <head>
     <title>消息推送中心</title>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" th:href="@{/static/home/css/home.css}"></link>
+    <link rel="stylesheet" th:href="@{/rose-content-server/static/home/css/home.css}"></link>
     <style th:inline="text">
         #north{
-            height:80px;background:#d8e1e4 url([[@{/static/home/img/headerBg.jpg}]]) no-repeat 0 0;background-size:100% 100%;
+            height:80px;background:#d8e1e4 url([[@{/rose-content-server/static/home/img/headerBg.jpg}]]) no-repeat 0 0;background-size:100% 100%;
         }
     </style>
-    <link rel="stylesheet" th:href="@{/static/home/js/themes/default/easyui.css}"></link>
-    <link rel="stylesheet" th:href="@{/static/home/js/themes/icon.css}"></link>
+    <link rel="stylesheet" th:href="@{/rose-content-server/static/home/js/themes/default/easyui.css}"></link>
+    <link rel="stylesheet" th:href="@{/rose-content-server/static/home/js/themes/icon.css}"></link>
     <script th:inline="javascript">
-        var contextPath = [[@{/}]];
+        var contextPath = "/rose-content-server/";
         var interceptorToken = [[${token}]];
         var interceptorUserId = [[${userId}]];
     </script>
-    <script th:src="@{/static/home/js/jquery-1.4.2.min.js}"></script>
-    <script th:src="@{/static/home/js/jQuery.easyui.js}"></script>
-    <script th:src="@{/static/myFun.js}"></script>
+    <script th:src="@{/rose-content-server/static/home/js/jquery-1.4.2.min.js}"></script>
+    <script th:src="@{/rose-content-server/static/home/js/jQuery.easyui.js}"></script>
+    <script th:src="@{/rose-content-server/static/myFun.js}"></script>
     <script th:inline="javascript">
         //tab close
         function tabClose() {
