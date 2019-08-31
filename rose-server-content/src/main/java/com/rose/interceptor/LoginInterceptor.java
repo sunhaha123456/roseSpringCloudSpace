@@ -38,6 +38,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         String url = request.getRequestURI();
         String userId = HttpRequestUtil.getValueByHeaderOrParam(request, SystemConstant.SYSTEM_USER_ID);
         String token = HttpRequestUtil.getValueByHeaderOrParam(request, SystemConstant.SYSTEM_TOKEN_NAME);
+        // 正常下是需要打开的
         /*
         if (StringUtil.isEmpty(userId) || StringUtil.isEmpty(token)) {
             log.error("参数错误！url：{}，userId：{}，token：{}", url, userId, token);

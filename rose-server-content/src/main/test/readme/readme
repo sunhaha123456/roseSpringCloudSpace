@@ -54,10 +54,10 @@ public class GlobalFeignConfiguration {
         文件修改了，但是定时任务还没执行
         这段时间就是延迟。
 7、SpringCloudGateway
-    权限校验
-    日志记录
-    网关是否会路由到处于健康的实例
+    跨域
+    超时
     限流
+    网关是否会路由到处于健康的实例 否
 
 
 

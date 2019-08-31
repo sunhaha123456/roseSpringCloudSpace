@@ -27,7 +27,8 @@ public class LoginControler {
     private LoginService loginService;
 
     @GetMapping(value = "/toLogin")
-    public String toLogin() {
+    public String toLogin() throws InterruptedException {
+        Thread.sleep(10000000000L);
         return "login";
     }
 
