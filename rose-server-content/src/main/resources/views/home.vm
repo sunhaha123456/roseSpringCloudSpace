@@ -3,22 +3,22 @@
 <head>
     <title>消息推送中心</title>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" th:href="@{/rose-content-server/static/home/css/home.css}"></link>
+    <link rel="stylesheet" th:href="@{/static/home/css/home.css}"></link>
     <style th:inline="text">
         #north{
-            height:80px;background:#d8e1e4 url([[@{/rose-content-server/static/home/img/headerBg.jpg}]]) no-repeat 0 0;background-size:100% 100%;
+            height:80px;background:#d8e1e4 url([[@{/static/home/img/headerBg.jpg}]]) no-repeat 0 0;background-size:100% 100%;
         }
     </style>
-    <link rel="stylesheet" th:href="@{/rose-content-server/static/home/js/themes/default/easyui.css}"></link>
-    <link rel="stylesheet" th:href="@{/rose-content-server/static/home/js/themes/icon.css}"></link>
+    <link rel="stylesheet" th:href="@{/static/home/js/themes/default/easyui.css}"></link>
+    <link rel="stylesheet" th:href="@{/static/home/js/themes/icon.css}"></link>
     <script th:inline="javascript">
-        var contextPath = "/rose-content-server/";
+        var contextPath = [[@{/}]];
         var interceptorToken = [[${token}]];
         var interceptorUserId = [[${userId}]];
     </script>
-    <script th:src="@{/rose-content-server/static/home/js/jquery-1.4.2.min.js}"></script>
-    <script th:src="@{/rose-content-server/static/home/js/jQuery.easyui.js}"></script>
-    <script th:src="@{/rose-content-server/static/myFun.js}"></script>
+    <script th:src="@{/static/home/js/jquery-1.4.2.min.js}"></script>
+    <script th:src="@{/static/home/js/jQuery.easyui.js}"></script>
+    <script th:src="@{/static/myFun.js}"></script>
     <script th:inline="javascript">
         //tab close
         function tabClose() {
@@ -178,8 +178,8 @@
 </head>
 <body class="easyui-layout" style="overflow-y:hidden" scroll="no">
 <div id="north" region="north" split="true" border="false">
-	<div class="logo">消息队列管理系统</div>
-	<div class="logout">您好，<span id="unameHomeSpan"/>&nbsp;|&nbsp; <a href="#" id="loginOutHref">退出登录</a></div>
+    <div class="logo">消息队列管理系统</div>
+    <div class="logout">您好，<span id="unameHomeSpan"/>&nbsp;|&nbsp; <a href="#" id="loginOutHref">退出登录</a></div>
 </div>
 <div id="west" region="west" split="true" title="导航菜单" style="width:180px;padding:10px;background-color: #E9FFEB">
     <div class="easyui-accordion" fit="true" border="false" style="background-color: #E9FFEB"></div>
@@ -189,14 +189,14 @@
 </div>
 
 <div id="mm" class="easyui-menu" style="width:150px;">
-	<div id="mm-tabclose">关闭</div>
-	<div id="mm-tabcloseall">全部关闭</div>
-	<div id="mm-tabcloseother">除此之外全部关闭</div>
-	<div class="menu-sep"></div>
-	<div id="mm-tabcloseright">当前页右侧全部关闭</div>
-	<div id="mm-tabcloseleft">当前页左侧全部关闭</div>
-	<div class="menu-sep"></div>
-	<div id="mm-exit">退出</div>
+    <div id="mm-tabclose">关闭</div>
+    <div id="mm-tabcloseall">全部关闭</div>
+    <div id="mm-tabcloseother">除此之外全部关闭</div>
+    <div class="menu-sep"></div>
+    <div id="mm-tabcloseright">当前页右侧全部关闭</div>
+    <div id="mm-tabcloseleft">当前页左侧全部关闭</div>
+    <div class="menu-sep"></div>
+    <div id="mm-exit">退出</div>
 </div>
 </body>
 </html>
