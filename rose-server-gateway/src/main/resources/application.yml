@@ -1,0 +1,25 @@
+#server
+server:
+  port: 8888
+spring:
+  application:
+    # 服务名称尽量用-，不要用_，不要用特殊字符
+    name: rose-gateway-server
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        namespace: 421eeaa0-5cab-4c4a-8800-452184eb0606
+    gateway:
+      discovery:
+        locator:
+          # 让gateway通过服务发现组件找到其他的微服务
+          enabled: true
+      httpclient:
+        connect-timeout: 45000
+        response-timeout: 45000
+logging:
+# 嫌日志太多就注掉
+#  level:
+#    org.springframework.cloud.gateway: trace
+  config: classpath:logback.xml
