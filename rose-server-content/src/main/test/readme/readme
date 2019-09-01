@@ -54,10 +54,12 @@ public class GlobalFeignConfiguration {
         文件修改了，但是定时任务还没执行
         这段时间就是延迟。
 7、SpringCloudGateway
-    跨域
-    超时
+    超时设置：当请求调用的服务A迟迟不返回结果时，超过时间后，gateway会释放此请求
+    请求body最大长度：对slb进行设置即可
+    跨域：实验后未发现
     限流
-    网关是否会路由到处于健康的实例 否
+    网关默认转发规则
+        网关是否会路由到处于健康的实例 否
 
 
 
