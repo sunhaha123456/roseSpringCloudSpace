@@ -14,29 +14,10 @@ spring:
       discovery:
         locator:
           # 让gateway通过服务发现组件找到其他的微服务
-          enabled: false
+          enabled: true
       httpclient:
         connect-timeout: 45000
         response-timeout: 45000
-      routes:
-        - id: rose_content_server_route
-          uri: lb://rose-content-server
-          predicates:
-            - TimeBetween=上午0:00,下午11:59
-#          filters:
-#            - AddRequestHeader=X-Request-Foo, Bar
-#            - name: RequestRateLimiter
-#              args:
-#                # 令牌桶每秒填充平均速率
-#                redis-rate-limiter.replenishRate: 1
-#                # 令牌桶的上限
-#                redis-rate-limiter.burstCapacity: 1
-#                # 使用SpEL表达式从Spring容器中获取Bean对象
-#                key-resolver: "#{@pathKeyResolver}"
-#  redis:
-#    host: localhost
-#    port: 6379
-    database: 3
 logging:
 # 嫌日志太多就注掉
 #  level:
