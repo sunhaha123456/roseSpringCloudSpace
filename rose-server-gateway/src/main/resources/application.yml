@@ -22,7 +22,9 @@ spring:
         - id: rose_content_server_route
           uri: lb://rose-content-server
           predicates:
+            #启用相应的规则即可
             - TimeBetween=上午0:00,下午11:59
+            - Path=/rose-content-server/**
           filters:
             - name: RequestRateLimiter
               args:
@@ -36,7 +38,7 @@ spring:
     host: 118.190.57.18
     port: 6379
     database: 3
-    password: xxx
+    password: xxxx
 
 logging:
 # 嫌日志太多就注掉
