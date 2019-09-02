@@ -23,20 +23,21 @@ spring:
           uri: lb://rose-content-server
           predicates:
             - TimeBetween=上午0:00,下午11:59
-#          filters:
-#            - AddRequestHeader=X-Request-Foo, Bar
-#            - name: RequestRateLimiter
-#              args:
-#                # 令牌桶每秒填充平均速率
-#                redis-rate-limiter.replenishRate: 1
-#                # 令牌桶的上限
-#                redis-rate-limiter.burstCapacity: 1
-#                # 使用SpEL表达式从Spring容器中获取Bean对象
-#                key-resolver: "#{@pathKeyResolver}"
-#  redis:
-#    host: localhost
-#    port: 6379
-#    database: 3
+          filters:
+            - name: RequestRateLimiter
+              args:
+                # 令牌桶每秒填充平均速率
+                redis-rate-limiter.replenishRate: 1
+                # 令牌桶的上限
+                redis-rate-limiter.burstCapacity: 1
+                # 使用SpEL表达式从Spring容器中获取Bean对象
+                key-resolver: "#{@pathKeyResolver}"
+  redis:
+    host: 118.190.57.18
+    port: 6379
+    database: 3
+    password: xxx
+
 logging:
 # 嫌日志太多就注掉
 #  level:
