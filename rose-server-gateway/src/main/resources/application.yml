@@ -14,10 +14,19 @@ spring:
       discovery:
         locator:
           # 让gateway通过服务发现组件找到其他的微服务
-          enabled: true
+          enabled: false
       httpclient:
         connect-timeout: 45000
         response-timeout: 45000
+      routes:
+        - id: rose-content-server-route
+          uri: lb://rose-content-server
+          predicates:
+            - Path=/rose-content-server/**
+        - id: rose-login-server-route
+          uri: lb://rose-login-server
+          predicates:
+            - Path=/rose-login-server/**
 logging:
 # 嫌日志太多就注掉
 #  level:

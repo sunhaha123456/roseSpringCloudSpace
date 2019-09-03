@@ -45,7 +45,7 @@ public class Application {
                 return errorHandle(exchange);
             }
             // 访问 http://127.0.0.1:8888/rose-content-server/login/toSuccess?token=940a0b9140
-            // 获取到的是 /login/toSuccess
+            // 获取到的是 rose-content-server/login/toSuccess
             String url = httpRequest.getPath().toString();
             if (URL_NOT_ARROW.contains(url)) {
                 log.error("禁止访问链接：{}", url);
