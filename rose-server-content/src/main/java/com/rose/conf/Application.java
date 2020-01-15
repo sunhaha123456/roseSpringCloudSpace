@@ -35,7 +35,6 @@ public class Application extends WebMvcConfigurationSupport {
 
     @RequestMapping("/home")
     String home() {
-
         return "Hello World!";
     }
 
