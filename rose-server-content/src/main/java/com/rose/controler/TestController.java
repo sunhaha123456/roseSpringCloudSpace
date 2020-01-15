@@ -134,6 +134,8 @@ public class TestController {
         Entry entry = null;
         try {
             // 定义sentinel 资源标志名称
+            // 即：sentinel控制台中，需要对簇点链路中的 user-sentinelTest1 进行相应设置，而非 /user/sentinelTest1
+            //     并且 user-sentinelTest1 与 /user/sentinelTest1 不要重名，否则会有问题
             String sentinelFlagName = "user-sentinelTest1";
             ContextUtil.enter(sentinelFlagName);
             entry = SphU.entry(sentinelFlagName);
@@ -144,7 +146,7 @@ public class TestController {
             //需要降级处理时，抛此异常
 //            throw new SentinelCaputeException(ResponseResultCode.OPERT_ERROR);
         } catch (BlockException e) {
-            // 如果被保护的资源被限流或者降级了，就会抛BlockException
+            // 如果被保护的资源触发了 限流 或 降级，都会抛 BlockException
             log.error("接口-/user/sentinelTest1，发生了限流，或者降级了，原因：{}", e);
             throw e;
         } catch (SentinelCaputeException e) {
