@@ -1,5 +1,6 @@
 package com.rose.conf;
 
+import com.netflix.loadbalancer.IRule;
 import com.rose.common.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
@@ -54,6 +55,11 @@ public class Application {
             log.info("request url：{}，method：{}，放行！", url, method);
             return chain.filter(exchange);
         };
+    }
+
+    @Bean
+    public IRule nacosWeightedRule() {
+        return new NacosWeightedRule();
     }
 
     @Bean

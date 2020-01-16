@@ -1,4 +1,4 @@
-package com.ribbon.role;
+package com.rose.conf;
 
 import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
 import com.alibaba.cloud.nacos.ribbon.NacosServer;
