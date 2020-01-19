@@ -7,12 +7,14 @@ import com.alibaba.csp.sentinel.context.ContextUtil;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.rose.common.data.response.ResponseResult;
 import com.rose.common.data.response.ResponseResultCode;
+import com.rose.common.data.response.StringResponse;
 import com.rose.common.exception.SentinelCaputeException;
 import com.rose.common.util.JsonUtil;
 import com.rose.data.base.BaseDto;
 import com.rose.data.to.dto.UserLoginDto;
 import com.rose.service.feign.FeignLoginService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -46,6 +48,9 @@ public class TestController {
 
     @Inject
     private FeignLoginService feignLoginService;
+
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
     /**
      * 功能：证明可以找到服务
@@ -123,6 +128,11 @@ public class TestController {
         dto.setKey("444");
         ResponseResult resp = feignLoginService.verify(dto);
         System.out.println(JsonUtil.objectToJson(resp));
+    }
+
+    @GetMapping("/mqTest")
+    public void sentinelTest1() {
+        rocketMQTemplate.convertAndSend("topicA", new StringResponse("1111"));
     }
 
     // -------------- sentinel 限流、降级
