@@ -16,6 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.cloud.stream.messaging.Sink;
+import org.springframework.cloud.stream.messaging.Source;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -122,6 +126,23 @@ public class TestController {
         dto.setKey("444");
         ResponseResult resp = feignLoginService.verify(dto);
         System.out.println(JsonUtil.objectToJson(resp));
+    }
+
+    @Inject
+    private Source source;
+
+    /**
+     * 功能：向rocketmq 发送消息
+     * @return
+     */
+    @GetMapping("/test5")
+    public void test5() {
+        source.output().send(MessageBuilder.withPayload("消息体").build());
+    }
+
+    @StreamListener(Sink.INPUT)
+    public void receive(String messageBody) {
+        System.out.println("通过stream接受到消息，messageBody = " + messageBody);
     }
 
     // -------------- sentinel 限流、降级

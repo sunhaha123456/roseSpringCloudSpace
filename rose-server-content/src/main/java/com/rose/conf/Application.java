@@ -6,6 +6,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.cloud.stream.messaging.Sink;
+import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Primary;
@@ -27,6 +30,7 @@ import javax.inject.Inject;
 @MapperScan("com.rose.dbopt.mapper")
 @SpringBootApplication
 @EnableFeignClients(basePackages = "com.rose.service.feign")
+@EnableBinding({Source.class, Sink.class})
 public class Application extends WebMvcConfigurationSupport {
     @Inject
     private SessionIdInterceptor sessionIdInterceptor;
