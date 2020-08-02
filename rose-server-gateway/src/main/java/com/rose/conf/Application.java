@@ -37,7 +37,7 @@ public class Application {
 
     @Bean
     @Order(0)
-    public GlobalFilter a() {
+    public GlobalFilter a() { // 定义 springcloud gateway 全局过滤器，数值越小，越先执行
         return (exchange, chain) -> {
             ServerHttpRequest httpRequest = exchange.getRequest();
             String method = httpRequest.getMethodValue().toUpperCase();
