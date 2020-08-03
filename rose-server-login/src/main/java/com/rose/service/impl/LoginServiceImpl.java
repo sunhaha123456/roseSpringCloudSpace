@@ -56,6 +56,8 @@ public class LoginServiceImpl implements LoginService {
     public void out(Long userId, String token) {
         if (tokenValidate(userId, token)) {
             redisRepositoryCustom.delete(RedisKeyUtil.getRedisUserInfoKey(userId));
+        } else {
+            throw new BusinessException(ResponseResultCode.LOGIN_FIRST);
         }
     }
 
