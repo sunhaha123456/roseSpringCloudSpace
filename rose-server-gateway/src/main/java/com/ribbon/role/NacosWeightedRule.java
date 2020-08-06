@@ -44,10 +44,10 @@ public class NacosWeightedRule extends AbstractLoadBalancerRule {
             List<Instance> instanceList = namingService.selectInstances(name, true);
             if (instanceList.size() > 0) {
                 Instance instance = ExtendBalancer.getHostByRandomWeight2(instanceList);
-                log.info("选择到的实例：serviceName={}，ip={}", instance.getServiceName(), instance.getIp());
+                log.info("请求服务名称={}，选择到的实例：serviceName={}，ip={}", name, instance.getServiceName(), instance.getIp());
                 return new NacosServer(instance);
             } else {
-                log.info("未找到可用实例！");
+                log.info("请求服务名称={}，未找到可用实例！", name);
                 return null;
             }
         } catch (Exception e) {
