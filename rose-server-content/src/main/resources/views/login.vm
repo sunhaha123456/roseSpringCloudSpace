@@ -11,6 +11,7 @@
             background-size:100% 100%;
         }
     </style>
+    <link rel="icon" th:href="@{/static/img/favicon.ico}" type="image/x-icon"/>
     <link rel="stylesheet" th:href="@{/static/formvalidator/style/validator.css}"></link>
     <script th:inline="javascript">
         var contextPath = "/rose-content-server/";

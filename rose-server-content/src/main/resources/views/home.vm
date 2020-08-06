@@ -3,6 +3,7 @@
 <head>
     <title>消息推送中心</title>
     <meta charset="UTF-8" />
+    <link rel="icon" th:href="@{/static/img/favicon.ico}" type="image/x-icon"/>
     <link rel="stylesheet" th:href="@{/static/home/css/home.css}"></link>
     <style th:inline="text">
         #north{

@@ -7,6 +7,12 @@ spring:
   application:
     # 服务名称尽量用-，不要用_，不要用特殊字符
     name: rose-gateway-server
+  zipkin:
+    base-url: http://127.0.0.1:9411/
+    discoveryClientEnabled: false
+  sleuth:
+    sampler:
+      probability: 1.0
   cloud:
     nacos:
       discovery:
