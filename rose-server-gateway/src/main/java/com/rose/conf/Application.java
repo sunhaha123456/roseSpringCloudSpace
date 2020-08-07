@@ -48,7 +48,7 @@ public class Application {
             // 获取到的是 rose-content-server/login/toSuccess
             String url = httpRequest.getPath().toString();
             if (URL_NOT_ARROW.contains(url)) {
-                log.error("请求url：{}，method：{}，禁止！", url);
+                log.error("请求url：{}，method：{}，禁止！", url, method);
                 return errorHandle(exchange);
             }
             log.info("请求url：{}，method：{}，放行！", url, method);
