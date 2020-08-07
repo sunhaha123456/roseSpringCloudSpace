@@ -25,7 +25,7 @@ public class LoginControler {
     private LoginService loginService;
 
     /**
-     * 功能：登录
+     * 功能：登录验证
      * @param param
      * @return
      * @throws Exception
